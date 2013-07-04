@@ -1,0 +1,100 @@
+  <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+                  "http://www.w3.org/TR/html4/strict.dtd">
+    <html>
+      <head>
+        <title>Media Example</title>
+		<link rel="stylesheet" href="estilos2.css">
+        <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+        <script type="text/javascript" charset="utf-8">
+
+       
+        document.addEventListener("deviceready", onDeviceReady, false);
+
+        // Cordova is ready
+        //
+        function onDeviceReady() {
+            playAudio("http://audio.ibeat.org/content/p1rj1s/p1rj1s_-_rockGuitar.mp3");
+        }
+
+       
+        var mp3 = null;
+        var mediaTimer = null;
+
+       
+      function playAudio(src) {
+       	   
+           mp3 = new Media(src, onSuccess, onError);   
+           mp3.play();       
+            if (mediaTimer == null) {
+            	mediaTimer = setInterval(reloj, 1000);
+            }
+      }
+
+ 	 function reloj(){
+                    mp3.getCurrentPosition(situacion,errorposi);
+               	}
+               	
+      function situacion(position) {
+         		 if (position > -1) {
+         		 	MuestraPosicion((position) + " sec");
+         		       		 	}
+         		 }
+         function errorposi(e){
+         			console.log("Error getting pos=" + e);
+         			MuestraPosicion("Error: " + e);
+         			 }
+        function pauseAudio() {
+            if (mp3) {
+                mp3.pause();
+            }
+        }
+
+       
+        function stopAudio() {
+            if (mp3) {
+                mp3.stop();
+            }
+            clearInterval(mediaTimer);
+            mediaTimer = null;
+            MuestraPosicion("0.0s");
+        }
+
+        
+        function onSuccess() {
+            console.log("playAudio():Audio Success");
+        }
+
+        
+        function onError(error) {
+            alert('code: '    + error.code    + '\n' + 
+                  'message: ' + error.message + '\n');
+        }
+
+        
+        function MuestraPosicion(position) {
+            document.getElementById('audio_position').innerHTML = position;
+        }
+
+        </script>
+        
+        
+      </head>
+      <body>
+     
+	   <div class="tabla">
+       <table>
+       <tr>
+       <td colspan=3><h3>Reproductor Mp3</h3></td></tr><tr>
+       <td colspan=3><p id="audio_position" align="center"></p></td></tr><tr>
+       <td><a href="#" class="boton" onclick="playAudio('http://audio.ibeat.org/content/p1rj1s/p1rj1s_-_rockGuitar.mp3');"> Play </a>
+        </td><td>      
+        <a href="#" class="boton" onclick="pauseAudio();">Pause</a></td><td>
+       
+     
+        <a href="#" class="boton" onclick="stopAudio();">Stop</a>
+        </td></tr>
+        </table>    
+        </div>
+        
+      </body>
+    </html>
